@@ -1,12 +1,14 @@
-// GKE用のサービスアカウント
+// GKEクラスタのリソース管理で使用するIAMサービスアカウント
 resource "google_service_account" "gke_sa_dev_app" {
   account_id    = "gke-sa-dev-app"
   display_name  = "gke-sa-dev-app"
 }
 
-# GKE用のサービスアカウントにロール付与
+# 上記IAMサービスアカウントにロールをいくつか付与
 # ・Cloud SQL クライアント
 # ・Secret Manager のシークレット アクセサー
+# ・Artifact Registry 管理者
+# ・ストレージオブジェクト閲覧者
 resource "google_project_iam_member" "sa_sql_client_dev_app" {
   project = var.project_id
   role    = "roles/cloudsql.client"
@@ -15,6 +17,16 @@ resource "google_project_iam_member" "sa_sql_client_dev_app" {
 resource "google_project_iam_member" "sa_secret_accessor_dev_app" {
   project = var.project_id
   role    = "roles/secretmanager.secretAccessor"
+  member  = "serviceAccount:${google_service_account.gke_sa_dev_app.email}"
+}
+resource "google_project_iam_member" "sa_artifact_registry_reader_dev_app" {
+  project = var.project_id
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${google_service_account.gke_sa_dev_app.email}"
+}
+resource "google_project_iam_member" "sa_storage_viewer_dev_app" {
+  project = var.project_id
+  role    = "roles/storage.objectViewer"
   member  = "serviceAccount:${google_service_account.gke_sa_dev_app.email}"
 }
 
