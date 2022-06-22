@@ -9,6 +9,11 @@ variable "project_id" {
     description = "プロジェクトID"
 }
 
+variable "project_number" {
+    type        = string
+    description = "プロジェクトNo."
+}
+
 variable "region" {
     type    = string
     default = "asia-northeast1"

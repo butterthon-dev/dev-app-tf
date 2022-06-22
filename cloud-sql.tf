@@ -6,7 +6,7 @@ resource "google_sql_database" "db_dev_app" {
 }
 
 resource "google_sql_database_instance" "db_instance_dev_app" {
-  name              = "db-instance-dev-app"
+  name              = "db-instance-dev-app-2"
   region            = var.region
   database_version  = "MYSQL_8_0"
 
